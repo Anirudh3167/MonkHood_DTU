@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> MonkHood </title>
+    <link rel="stylesheet" href="./styles/index.css">
+</head>
+<body>
+    <div class="mainContainer">
+        <!--  name, phone number, email, profile pic (save only firebase) and
+date of birth (using date picker)  -->
+        <div class="inputMainContainer">
+
+            <div class="userProfileDetails">
+
+                <div class="profilePicContainer">
+                    <div class="profileFieldHeading"> Profile 
+                        <div class="mandatorySign">*</div>
+                    </div>
+                    <div class="profilePicDisplay" onclick="uploadImage()"> 
+                        <img src="#" alt="No Image" style="display: none;" id="uploadImg">
+                        <div class="uploadProfilePic" id="uploadBanner"> Upload</div>
+                         </div>
+                    <input type="file" class="profilePic" style="display: none;" id="ImgInput" onchange="updateProfilePic(event)">
+                </div>
+                <div class="userNameContainer">
+                    <div class="userNameContent">
+                        <div class="fieldHeading"> First Name 
+                            <div class="mandatorySign">*</div>
+                        </div>
+                        <input type="text" name="fname" id="fname" class="inputBox" placeholder="FirstName" >
+                    </div>
+                    <div class="userNameContent">
+                        <div class="fieldHeading"> Last Name 
+                            <div class="mandatorySign">*</div>
+                        </div>
+                        <input type="text" name="lname" id="lname" class="inputBox" placeholder="LastName" >
+                    </div>
+                    <div class="userNameContent">
+                        <div class="fieldHeading"> Email
+                            <div class="mandatorySign">*</div>
+                        </div>
+                        <input type="email" name="email" id="email" class="inputBox" placeholder="Email ID" >
+                    </div>
+                </div>
+
+            </div>
+            <div class="otherContentsContainer">
+                <div class="itemContainer">
+                    <div class="fieldHeading"> phone number 
+                        <div class="mandatorySign">*</div>
+                    </div>
+                    <input type="tel" name="mobile" id="mobile" class="inputBox" placeholder="Mobile Number" >                    
+                </div>
+                <div class="itemContainer">
+                    <div class="fieldHeading"> Date of Birth 
+                        <div class="mandatorySign">*</div>
+                    </div>
+                    <input type="datetime-local" name="dob" id="dob" class="inputBox" placeholder="Date of Birth" >                    
+                </div>
+            </div>
+            <div class="btnControls">
+                <button class="submitBtn" type="submit"> Submit </button>
+                <button class="cancelBtn" type="reset"> Cancel </button>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    const uploadImage = () => {
+        var inp = document.getElementById("ImgInput");
+
+        inp.click();
+    }
+    const updateProfilePic = (event) => {
+        console.log(event.target.files);
+        var banner = document.getElementById("uploadBanner");
+        var imgContianer = document.getElementById("uploadImg");
+        if (event.target.files) {
+            banner.style.display = "none";
+            imgContianer.style.display = "flex";
+            imgContianer.src
+        } else {
+            banner.style.display = "flex";
+            imgContianer.style.display = "none";
+        }
+    }
+</script>
+</html>
