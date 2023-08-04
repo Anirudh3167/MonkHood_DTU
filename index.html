@@ -10,14 +10,42 @@
     <div class="mainContainer">
         <div class="subMainContainer">
             <div class="headingContainer"> Local Storage </div>
-            <input type="search" placeholder="search user" onchange="searchUsers(event);" class="userSearchBox" >
-            <div class="usersMainContainer">
+            <div class="controlBox">
+                <input type="search" placeholder="search user by name" oninput="searchUsers(event);" class="userSearchBox" >
+                <button class="newUser" onclick="addUser()">
+                        + new User
+                </button>
+            </div>
+            <div class="usersMainContainer" id="usersContianer">
                 <script>
+                    let usersData = [];
                     for(let i = 0; i < localStorage.length; i++) {
-                        if (Number(localStorage.key(i)) !== NaN) {
-                            let userData = JSON.parse(localStorage.getItem(localStorage.key(i)));
-                            console.log(userData);
-                            document.write(`<div class="userContainer">${userData.fname}</div>`);
+                        if (Number(localStorage.key(i)) == localStorage.key(i)) {
+                            let key = Number(localStorage.key(i));
+                            let userData = JSON.parse(localStorage.getItem(key));
+                            userData["key"] = key;
+                            usersData.push(userData);
+                            document.write(
+                                `<div class="userMainContainer">
+                                    <div class="userContainer">
+                                        <div class="userProfile">
+                                            A
+                                        </div>
+                                        <div class="userDetails">
+                                            <div class="userName">
+                                                ${userData.fname} ${userData.lname}
+                                            </div>
+                                            <div class="userEmail">
+                                                ${userData.email}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="userBtns">
+                                        <button class="EditBtn" onclick="EditUser(${key})"> Edit Profile </button>
+                                        <button class="DeleteBtn" onclick="DeleteUser(${key})"> Delete </button>
+                                    </div>
+                                </div>`
+                            );
                         }
                     }
                 </script>
@@ -26,11 +54,58 @@
     </div>
 </body>
 <script>
+    console.log(usersData);
     // functions
     const searchUsers = (event) => {
         event.preventDefault();
         // perform the search action.
-        console.log(`Search Query:${event.target.value}`);
+        const search = event.target.value;
+            
+        var doc = document.getElementById("usersContianer");
+        let content = "";
+        usersData.forEach((i) => {
+            if (i.fname.includes(search) || i.lname.includes(search)) {  
+                content +=`
+                    <div class="userMainContainer">
+                        <div class="userContainer">
+                            <div class="userProfile">
+                                A
+                            </div>
+                            <div class="userDetails">
+                                <div class="userName">
+                                    ${i.fname} ${i.lname}
+                                </div>
+                                <div class="userEmail">
+                                    ${i.email}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="userBtns">
+                            <button class="EditBtn" onclick="EditUser(${i.key})"> Edit Profile </button>
+                            <button class="DeleteBtn" onclick="DeleteUser(${i.key})"> Delete </button>
+                        </div>
+                    </div>`
+            }
+        });
+        if (content !== "") {
+            doc.innerHTML = content;
+        } else {
+            doc.innerHTML = `
+                <div class="noResults"> There are no search results </div>
+            `
+        }
+    }
+    const addUser = () => {
+        if (localStorage.getItem("update")) {localStorage.removeItem("update")}
+        window.location.replace("/user-details.html");
+    }
+    const EditUser = (id) => {
+        localStorage.setItem("update",JSON.stringify({"from":"local","id":id}));
+        window.location.replace("/user-details.html");
+    }
+    const DeleteUser = (id) => {
+        localStorage.removeItem(id);
+        window.location.reload();
     }
 </script>
 </html>

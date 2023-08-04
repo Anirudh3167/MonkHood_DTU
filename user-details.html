@@ -10,7 +10,7 @@
     <div class="mainContainer">
         <!--  name, phone number, email, profile pic (save only firebase) and
 date of birth (using date picker)  -->
-        <form action="/" method="post" class="inputMainContainer" onsubmit="handleSubmit(event)">
+        <form action="/" method="" class="inputMainContainer" onsubmit="handleSubmit(event)">
 
             <div class="userProfileDetails">
 
@@ -77,13 +77,17 @@ date of birth (using date picker)  -->
             dob : "",
             profilepic : ""
         }
+    let updateType = "";
+    let updateId = "";
 
     // Loading data on start.
     addEventListener("load",(e) => {
         console.log("Loading event is triggered");
         if (localStorage.getItem("update")) {
-            let update_id = Number(localStorage.getItem("update"));
-            userData = JSON.parse(localStorage.getItem(update_id));
+            let data = JSON.parse(localStorage.getItem("update"));
+            updateId = Number(data.id);
+            updateType = data.from;
+            userData = JSON.parse(localStorage.getItem(updateId));
             document.getElementsByName("fname")[0].value = userData.fname;
             document.getElementsByName("lname")[0].value = userData.lname;
             document.getElementsByName("email")[0].value = userData.email;
@@ -121,13 +125,26 @@ date of birth (using date picker)  -->
     const handleSubmit = (event) => {
         event.preventDefault();
         console.log(event);
-        let id = 103;
-        if (localStorage.getItem("id")) {
-            id = Number(localStorage.getItem("id")) + 1;
-            localStorage.setItem("id",id);
-        } else {localStorage.setItem("id",id);}
-        localStorage.setItem(id,JSON.stringify(userData));
-        if (localStorage.getItem("update")) {localStorage.removeItem("update")}
+        // For new Data.
+        if (updateType === "") {
+            let id = 103;
+            if (localStorage.getItem("id")) {
+                id = Number(localStorage.getItem("id")) + 1;
+                localStorage.setItem("id",id);
+            } else {localStorage.setItem("id",id);}
+            localStorage.setItem(id,JSON.stringify(userData));
+            if (localStorage.getItem("update")) {localStorage.removeItem("update")}
+            
+            window.location.replace("/");
+        } else if (updateType === "local") {
+            localStorage.setItem(updateId,JSON.stringify(userData));
+            if (localStorage.getItem("update")) {localStorage.removeItem("update")}
+
+            window.location.replace("/");
+        } else if (updateType === "firebase") {
+            // Firebase connection here.
+        }
+
     }
 </script>
 </html>
