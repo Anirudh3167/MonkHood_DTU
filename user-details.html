@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> MonkHood </title>
+    <link rel="stylesheet" href="./styles/user-details.css">
+</head>
+<body>
+    <div class="mainContainer">
+        <!--  name, phone number, email, profile pic (save only firebase) and
+date of birth (using date picker)  -->
+        <form action="/" method="post" class="inputMainContainer" onsubmit="handleSubmit(event)">
+
+            <div class="userProfileDetails">
+
+                <div class="profilePicContainer">
+                    <div class="profileFieldHeading"> Profile 
+                        <div class="mandatorySign">*</div>
+                    </div>
+                    <div class="profilePicDisplay" onclick="uploadImage()"> 
+                        <img src="#" alt="No Image" style="display: none;" id="uploadImg">
+                        <div class="uploadProfilePic" id="uploadBanner"> Upload</div>
+                         </div>
+                    <input type="file" class="profilePic" style="display: none;" accept="image/*" name="profilepic" id="ImgInput" onchange="updateProfilePic(event)" required >
+                </div>
+                <div class="userNameContainer">
+                    <div class="userNameContent">
+                        <div class="fieldHeading"> First Name 
+                            <div class="mandatorySign">*</div>
+                        </div>
+                        <input type="text" name="fname" id="fname" class="inputBox" placeholder="FirstName" onchange="changeData(event,'fname')" required >
+                    </div>
+                    <div class="userNameContent">
+                        <div class="fieldHeading"> Last Name 
+                            <div class="mandatorySign">*</div>
+                        </div>
+                        <input type="text" name="lname" id="lname" class="inputBox" placeholder="LastName" onchange="changeData(event,'lname')" required >
+                    </div>
+                    <div class="userNameContent">
+                        <div class="fieldHeading"> Email
+                            <div class="mandatorySign">*</div>
+                        </div>
+                        <input type="email" name="email" id="email" class="inputBox" placeholder="Email ID" onchange="changeData(event,'email')" required >
+                    </div>
+                </div>
+
+            </div>
+            <div class="otherContentsContainer">
+                <div class="itemContainer">
+                    <div class="fieldHeading"> phone number 
+                        <div class="mandatorySign">*</div>
+                    </div>
+                    <input type="tel" name="mobile" id="mobile" class="inputBox" placeholder="Mobile Number" onchange="changeData(event,'mobile')" required >                    
+                </div>
+                <div class="itemContainer">
+                    <div class="fieldHeading"> Date of Birth 
+                        <div class="mandatorySign">*</div>
+                    </div>
+                    <input type="date" name="dob" id="dob" class="inputBox" placeholder="Date of Birth" onchange="changeData(event,'dob')" required >                    
+                </div>
+            </div>
+            <div class="btnControls">
+                <button class="submitBtn" type="submit"> Submit </button>
+                <button class="cancelBtn" type="reset"> Cancel </button>
+            </div>
+        </form>
+    </div>
+</body>
+<script>
+    // Data variables.
+    let userData = {
+            fname : "",
+            lname : "",
+            email : "",
+            mobile : "",
+            dob : "",
+            profilepic : ""
+        }
+
+    // Loading data on start.
+    addEventListener("load",(e) => {
+        console.log("Loading event is triggered");
+        if (localStorage.getItem("update")) {
+            let update_id = Number(localStorage.getItem("update"));
+            userData = JSON.parse(localStorage.getItem(update_id));
+            document.getElementsByName("fname")[0].value = userData.fname;
+            document.getElementsByName("lname")[0].value = userData.lname;
+            document.getElementsByName("email")[0].value = userData.email;
+            document.getElementsByName("mobile")[0].value = userData.mobile;
+            document.getElementsByName("dob")[0].value = userData.dob;       
+        }
+    })
+
+    // Functions.
+    const changeData = (event,key) => {
+        userData[key] = event.target.value;
+    }
+    const uploadImage = () => {
+        var inp = document.getElementById("ImgInput");
+
+        inp.click();
+    }
+    const updateProfilePic = (event) => {
+        // Getting the Image.
+        const imgFile = event.target.files;
+
+        // Elements in action
+        var banner = document.getElementById("uploadBanner");
+        var imgContianer = document.querySelector("#uploadImg");
+        if (imgFile.length > 0) {   
+            banner.style.display = "none";
+            imgContianer.style.display = "flex";
+            userData.profilepic = URL.createObjectURL(imgFile[0]);
+            imgContianer.src = userData.profilepic;
+        } else {
+            banner.style.display = "flex";
+            imgContianer.style.display = "none";
+        }
+    }
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        console.log(event);
+        let id = 103;
+        if (localStorage.getItem("id")) {
+            id = Number(localStorage.getItem("id")) + 1;
+            localStorage.setItem("id",id);
+        } else {localStorage.setItem("id",id);}
+        localStorage.setItem(id,JSON.stringify(userData));
+        if (localStorage.getItem("update")) {localStorage.removeItem("update")}
+    }
+</script>
+</html>
