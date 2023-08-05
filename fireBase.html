@@ -102,11 +102,11 @@
         localStorage.setItem("createType","firebase");
         if (localStorage.getItem("update")) {localStorage.removeItem("update")}
         console.log(window.myData);
-        window.location.replace(window.location.origin + "/user-details.html");
+        window.location.replace(window.location.origin + "/MonkHood_DTU/user-details.html");
     }
     const EditUser = (id) => {
         localStorage.setItem("update",JSON.stringify({"from":"firebase","id":id}));
-        window.location.replace("/user-details.html");
+        window.location.replace("/MonkHood_DTU/user-details.html");
     }
     const DeleteUser = (id) => {
         localStorage.removeItem(id);
