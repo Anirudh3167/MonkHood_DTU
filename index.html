@@ -98,11 +98,11 @@
     const addUser = () => {
         localStorage.setItem("createType","firebase");
         if (localStorage.getItem("update")) {localStorage.removeItem("update")}
-        window.location.replace(window.location.origin + "/user-details.html");
+        window.location.replace(window.location.origin + window.location.pathname + "/user-details.html");
     }
     const EditUser = (id) => {
         localStorage.setItem("update",JSON.stringify({"from":"local","id":id}));
-        window.location.replace("/user-details.html");
+        window.location.replace(window.location.origin + window.location.pathname + "/user-details.html");
     }
     const DeleteUser = (id) => {
         localStorage.removeItem(id);
