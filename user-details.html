@@ -146,19 +146,19 @@ date of birth (using date picker)  -->
                 localStorage.setItem(id,JSON.stringify(userData));
                 if (localStorage.getItem("update")) {localStorage.removeItem("update")}
                 
-                window.location.replace(window.location.origin + "/");
+                window.location.replace(window.location.origin + "/MonkHood_DTU/");
             } else {
                 // Firebase connection here.
                 window.firebaseCommand = "write";
                 window.firebaseUser = userData;
                 document.getElementById("fireBaseTrigger").click();
-                window.location.replace(window.location.origin + "/fireBase.html");
+                window.location.replace(window.location.origin + "/MonkHood_DTU/fireBase.html");
             }
         } else if (updateType === "local") {
             localStorage.setItem(updateId,JSON.stringify(userData));
             if (localStorage.getItem("update")) {localStorage.removeItem("update")}
 
-            window.location.replace(window.location.origin + "/");
+            window.location.replace(window.location.origin + "/MonkHood_DTU/");
         } else if (updateType === "firebase") {
             window.firebaseCommand = "update";
             window.firebaseUser = userData;
