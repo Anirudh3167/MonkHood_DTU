@@ -3,13 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Monkhood | Users </title>
+    <title>Monkhood | FireBase </title>
     <link rel="stylesheet" href="./styles/index.css">
 </head>
+<script src="https://www.gstatic.com/firebasejs/10.1.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.1.0/firebase-firestore-compat.js"></script>
+<script type="module" src="./fireBase.js"></script>
 <body>
     <div class="mainContainer">
         <div class="subMainContainer">
-            <div class="headingContainer"> Local Storage </div>
+            <div class="headingContainer"> FireBase Storage </div>
             <div class="controlBox">
                 <input type="search" placeholder="search user by name" oninput="searchUsers(event);" class="userSearchBox" >
                 <button class="newUser" onclick="addUser()">
@@ -98,10 +101,11 @@
     const addUser = () => {
         localStorage.setItem("createType","firebase");
         if (localStorage.getItem("update")) {localStorage.removeItem("update")}
+        console.log(window.myData);
         window.location.replace(window.location.origin + "/user-details.html");
     }
     const EditUser = (id) => {
-        localStorage.setItem("update",JSON.stringify({"from":"local","id":id}));
+        localStorage.setItem("update",JSON.stringify({"from":"firebase","id":id}));
         window.location.replace("/user-details.html");
     }
     const DeleteUser = (id) => {

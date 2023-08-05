@@ -6,6 +6,9 @@
     <title> MonkHood </title>
     <link rel="stylesheet" href="./styles/user-details.css">
 </head>
+<script src="https://www.gstatic.com/firebasejs/10.1.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.1.0/firebase-firestore-compat.js"></script>
+<script type="module" src="./fireBase.js"></script>
 <body>
     <div class="mainContainer">
         <!--  name, phone number, email, profile pic (save only firebase) and
@@ -63,6 +66,7 @@ date of birth (using date picker)  -->
             <div class="btnControls">
                 <button class="submitBtn" type="submit"> Submit </button>
                 <button class="cancelBtn" type="reset"> Cancel </button>
+                <div class="fireBaseTrigger" style="display: none;" id="fireBaseTrigger"></div>
             </div>
         </form>
     </div>
@@ -87,12 +91,18 @@ date of birth (using date picker)  -->
             let data = JSON.parse(localStorage.getItem("update"));
             updateId = Number(data.id);
             updateType = data.from;
-            userData = JSON.parse(localStorage.getItem(updateId));
-            document.getElementsByName("fname")[0].value = userData.fname;
-            document.getElementsByName("lname")[0].value = userData.lname;
-            document.getElementsByName("email")[0].value = userData.email;
-            document.getElementsByName("mobile")[0].value = userData.mobile;
-            document.getElementsByName("dob")[0].value = userData.dob;       
+            if (updateType === "local") {   
+                userData = JSON.parse(localStorage.getItem(updateId));
+                document.getElementsByName("fname")[0].value = userData.fname;
+                document.getElementsByName("lname")[0].value = userData.lname;
+                document.getElementsByName("email")[0].value = userData.email;
+                document.getElementsByName("mobile")[0].value = userData.mobile;
+                document.getElementsByName("dob")[0].value = userData.dob;       
+            } else if (updateType === "firebase") {
+                window.getUser = id;
+                document.getElementById("fireBaseTrigger").click();
+                userData = window.firebaseUser;
+            }
         }
     })
 
@@ -126,23 +136,33 @@ date of birth (using date picker)  -->
         event.preventDefault();
         console.log(event);
         // For new Data.
-        if (updateType === "") {
-            let id = 103;
-            if (localStorage.getItem("id")) {
-                id = Number(localStorage.getItem("id")) + 1;
-                localStorage.setItem("id",id);
-            } else {localStorage.setItem("id",id);}
-            localStorage.setItem(id,JSON.stringify(userData));
-            if (localStorage.getItem("update")) {localStorage.removeItem("update")}
-            
-            window.location.replace("/");
+        if (updateType === "") {    // create
+            if (localStorage.getItem("createType") === "local") {
+                let id = 103;
+                if (localStorage.getItem("id")) {
+                    id = Number(localStorage.getItem("id")) + 1;
+                    localStorage.setItem("id",id);
+                } else {localStorage.setItem("id",id);}
+                localStorage.setItem(id,JSON.stringify(userData));
+                if (localStorage.getItem("update")) {localStorage.removeItem("update")}
+                
+                window.location.replace(window.location.origin + "/");
+            } else {
+                // Firebase connection here.
+                window.firebaseCommand = "write";
+                window.firebaseUser = userData;
+                document.getElementById("fireBaseTrigger").click();
+                window.location.replace(window.location.origin + "/fireBase.html");
+            }
         } else if (updateType === "local") {
             localStorage.setItem(updateId,JSON.stringify(userData));
             if (localStorage.getItem("update")) {localStorage.removeItem("update")}
 
-            window.location.replace("/");
+            window.location.replace(window.location.origin + "/");
         } else if (updateType === "firebase") {
-            // Firebase connection here.
+            window.firebaseCommand = "update";
+            window.firebaseUser = userData;
+            document.getElementById("fireBaseTrigger").click();
         }
 
     }
